@@ -1,0 +1,45 @@
+sudo vim ~/.bashrc
+
+# Auto-source OpenStack RC file
+if [ -f /opt/stack/devstack/openrc ]; then
+    source /opt/stack/devstack/openrc
+fi
+
+
+source /opt/stack/devstack/openrc admin
+openstack token issue
+
+
+openstack subnet create lab \
+  --network lab \
+  --subnet-range 192.168.1.0/26 \
+  --allocation-pool start=192.168.1.31,end=192.168.1.62 \
+  --dns-nameserver 8.8.8.8 \
+  --dhcp
+
+openstack router create lab-router
+openstack router set lab-router --external-gateway public
+openstack router add subnet lab-router lab
+
+-----------------------------------------------------------------
+openstack project create lab2 --description "Lab2 project for NVO"
+
+openstack user create lab2_admin --project lab2 --password atul
+
+openstack role add --project lab2 --user lab2_admin member
+
+openstack flavor create ngn.tiny \
+  --vcpus 1 \
+  --ram 128 \
+  --disk 1 \
+  --ephemeral 1 \
+  --swap 1
+
+openstack flavor list
+
+
+openstack security group rule create vn-a-no-internet \
+  --egress \
+  --protocol any \
+  --remote-ip 192.168.100.1/24
+
