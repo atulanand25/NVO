@@ -1,0 +1,25 @@
+{
+  "network": {
+    "name": "bgp-net",
+    "subnet": "192.168.50.0/24",
+    "subnet_name": "lab9",
+    "gateway": "192.168.50.1",
+    "router_name": "lab9"
+  },
+
+  "routers":
+    {
+      "name": "frr",
+      "ip": "192.168.60.2",
+      "config_path": "./configs/frr",
+      "subnet": "192.168.60.0/24",
+      "gateway": "192.168.60.1"
+    },
+
+  "controllers":
+    {
+      "name": "ryu",
+      "ip": "192.168.60.3",
+      "config_path": "./configs/ryu"
+    }
+}
