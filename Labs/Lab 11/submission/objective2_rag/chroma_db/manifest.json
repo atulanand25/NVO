@@ -1,0 +1,16 @@
+{
+  "backend": "hf",
+  "collection": "network_kb",
+  "num_chunks": 33,
+  "sources": [
+    "firewall1_running_config.txt",
+    "network_design_doc.md",
+    "router1_running_config.txt",
+    "router2_running_config.txt",
+    "runbook_bgp_idle_troubleshooting.md",
+    "switch1_running_config.txt",
+    "switch2_running_config.txt"
+  ],
+  "chunk_size": 800,
+  "chunk_overlap": 150
+}

@@ -1,0 +1,322 @@
+
+===== OBJ2 Q1: What IP address is assigned to GigabitEthernet0/0/1 on Router1? =====
+
+Retrieved 4 chunks (lexical TF-IDF retrieval):
+  chunk 1 source=router1_running_config.txt distance=1.620
+    !
+    interface Loopback0
+     description Router-ID
+     ip address 10.255.255.1 255.255.255.255
+     ip ospf 1 area 0
+    !
+    interface GigabitEthernet0/0/0
+     description UPLINK to ISP-A (eBGP AS64501)
+     ip address 203.0.113.2 255.255.255.252
+     ip access-group INBOUND-FROM-ISP in
+     no shutdown
+    !
+    interface GigabitEthernet0/0/1
+     description To Switch1 (dist-sw-01) Gi1/0/24
+     ip address 10.10.0.1 255.255.255.252
+     ip ospf 1 a
+    ...
+  chunk 2 source=router2_running_config.txt distance=1.669
+    ! ==========================================================================
+    ! Device: Router2  (branch-rtr-01)
+    ! Role: Branch site router, OSPF area 10, iBGP to Router1 for internet egress
+    ! Captured: 2026-04-15 by atul@nexthop.ai
+    ! Platform: Cisco ISR4331/K9  IOS-XE 17.9.4a
+    ! ==========================================================================
+    version 17.9
+    hostname Router2
+    !
+    interface Loop
+    ...
+  chunk 3 source=switch1_running_config.txt distance=1.674
+    !
+    interface GigabitEthernet1/0/2
+     description Access - Engineering user port
+     switchport mode access
+     switchport access vlan 20
+     switchport nonegotiate
+     spanning-tree portfast
+     spanning-tree bpduguard enable
+    !
+    interface GigabitEthernet1/0/24
+     description Uplink to Router1 Gi0/0/1
+     no switchport
+     ip address 10.10.0.2 255.255.255.252
+     ip ospf 1 area 0
+     ip ospf network point-to-point
+    !
+    interface Vlan
+    ...
+  chunk 4 source=router2_running_config.txt distance=1.758
+    !
+    interface GigabitEthernet0/0/1
+     description Branch LAN - VLAN 30 (Sales)
+     no ip address
+     no shutdown
+    !
+    interface GigabitEthernet0/0/1.30
+     description VLAN 30 - Sales branch users
+     encapsulation dot1Q 30
+     ip address 10.20.30.1 255.255.255.0
+     ip ospf 1 area 10
+     ip helper-address 10.20.0.50
+    !
+    interface GigabitEthernet0/0/1.40
+     description VLAN 40 - Branch voice
+     encapsulation dot1Q 40
+     ip address 1
+    ...
+
+Answer:
+The IP address assigned to GigabitEthernet0/0/1 on Router1 is **10.10.0.1 255.255.255.252** [source: router1_running_config.txt].
+
+===== OBJ2 Q2: What OSPF areas are configured in the network, and which networks are advertised into each? =====
+
+Retrieved 4 chunks (lexical TF-IDF retrieval):
+  chunk 1 source=network_design_doc.md distance=1.595
+    ## 3. Routing architecture
+    
+    ### OSPF
+    
+    - Single OSPF process, process-id `1`.
+    - Area 0 (backbone): all HQ L3 devices — Router1, Switch1, Firewall1.
+    - Area 10 (branch): Router2 and its dot1Q subinterfaces. Configured as
+      `stub no-summary` to limit LSA types on the low-bandwidth MPLS link.
+    - All P2P transit links use `ip ospf network point-to-point` to avoid
+      DR/BDR election overhead.
+    - All user VL
+    ...
+  chunk 2 source=runbook_bgp_idle_troubleshooting.md distance=1.779
+    ## Triage
+    
+    1. On the local peer:
+       ```
+       show ip bgp neighbor <peer-ip>
+       show logging | include BGP|TCP
+       ping <peer-loopback> source Loopback0
+       ```
+    2. If ping succeeds but BGP is still Idle, check for MD5 errors in the
+       log with `%TCP-6-BADAUTH`. That is the fingerprint of cause #1.
+    3. Compare the configured password on both ends:
+       ```
+       show running-config | section router bgp
+       ```
+    ...
+  chunk 3 source=network_design_doc.md distance=1.789
+    ## 6. Security zones
+    
+    - **outside** (security-level 0) = ISP handoff (198.51.100.0/30)
+    - **inside** (security-level 100) = HQ user VLANs and transit links
+    - **dmz** (security-level 50) = published-service servers in 10.30.0.0/24
+    
+    Inbound policy from outside is defined by ACL `OUTSIDE_IN` on
+    Firewall1 (see firewall1 running-config for full rules). Only
+    published services on 198.51.100.10–12 are per
+    ...
+  chunk 4 source=runbook_bgp_idle_troubleshooting.md distance=1.789
+    # Runbook: BGP neighbor stuck in Idle
+    
+    **Applies to:** Cisco IOS-XE and Cisco Firepower FTD peers inside AS 65001
+    **Severity:** P2 (service-affecting if peer is in the forwarding path)
+    **Owner:** NetOps on-call
+    **Last reviewed:** 2026-04-02
+    
+    ## Symptoms
+    
+    - `show ip bgp summary` on the local peer shows `State/PfxRcd = Idle`
+    - `show logging | include BGP` shows repeated messages such as
+      - `%BGP-5-
+    ...
+
+Answer:
+Based on the provided context, the OSPF configuration includes two areas:
+
+**Area 0 (backbone):**
+- Contains all HQ L3 devices: Router1, Switch1, and Firewall1 [source: network_design_doc.md]
+
+**Area 10 (branch):**
+- Contains Router2 and its dot1Q subinterfaces [source: network_design_doc.md]
+- Configured as `stub no-summary` to limit LSA types on the low-bandwidth MPLS link [source: network_design_doc.md]
+
+**Additional OSPF design details:**
+- Single OSPF process with process-id `1` [source: network_design_doc.md]
+- All P2P transit links use `ip ospf network point-to-point` to avoid DR/BDR election overhead [source: network_design_doc.md]
+- All user VLAN SVIs are configured as `passive-interface` to prevent adjacencies forming across access ports [source: network_design_doc.md]
+- Router-IDs are statically assigned from the 10.255.255.0/24 loopback range (Router1 .1, Switch1 .2, Firewall1 .3, Router2 .4) [source: network_design_doc.md]
+
+I don't have enough information in the provided documents to answer which specific networks are advertised into each area, as the context does not include network statements or specific VLAN/subnet details for OSPF advertisement.
+
+===== OBJ2 Q3: What ACLs are applied to the outside interface on Firewall1? =====
+
+Retrieved 4 chunks (lexical TF-IDF retrieval):
+  chunk 1 source=network_design_doc.md distance=1.671
+    ## 5. Traffic flow reference: VLAN 10 → Internet
+    
+    1. Client on VLAN 10 (Finance, 10.20.10.0/24) sends traffic to
+       default gateway `10.20.10.1` on Switch1.
+    2. Switch1 forwards via OSPF default route learned from Router1 out
+       `Gi1/0/24` → `10.10.0.1`.
+    3. Router1 forwards the packet via its static default
+       `ip route 0.0.0.0 0.0.0.0 203.0.113.1`, BUT for user VLAN traffic
+       the policy requires 
+    ...
+  chunk 2 source=network_design_doc.md distance=1.715
+    ## 6. Security zones
+    
+    - **outside** (security-level 0) = ISP handoff (198.51.100.0/30)
+    - **inside** (security-level 100) = HQ user VLANs and transit links
+    - **dmz** (security-level 50) = published-service servers in 10.30.0.0/24
+    
+    Inbound policy from outside is defined by ACL `OUTSIDE_IN` on
+    Firewall1 (see firewall1 running-config for full rules). Only
+    published services on 198.51.100.10–12 are per
+    ...
+  chunk 3 source=network_design_doc.md distance=1.719
+    > **Operational note (2026-03-18):** the Switch1 ↔ Firewall1 session
+    > flipped to Idle after a password rotation on Firewall1 that was not
+    > mirrored on Switch1. Both ends **must** carry the same `neighbor …
+    > password` value; otherwise the session never leaves Idle.
+  chunk 4 source=firewall1_running_config.txt distance=1.733
+    ! ==========================================================================
+    ! Device: Firewall1  (edge-fw-01)
+    ! Role: Internet edge firewall, NAT/PAT for user VLANs, zone-based ACLs
+    ! Captured: 2026-04-15 by atul@nexthop.ai
+    ! Platform: Cisco FPR-1140  FTDv 7.4.2
+    ! ==========================================================================
+    hostname Firewall1
+    !
+    ! ----- interfaces -----
+    interface Gig
+    ...
+
+Answer:
+Based on the provided context, the outside interface on Firewall1 uses ACL `OUTSIDE_IN` for inbound policy [source: network_design_doc.md].
+
+However, I don't have the complete ACL configuration details in the provided documents. The context mentions that "Inbound policy from outside is defined by ACL `OUTSIDE_IN` on Firewall1 (see firewall1 running-config for full rules)" and notes that "Only published services on 198.51.100.10–12 are permitted from the Internet" [source: network_design_doc.md], but the firewall1_running_config.txt excerpt provided does not include the actual ACL rules or the ACL application commands.
+
+To see the full ACL configuration and how it is applied to the outside interface, the complete firewall1 running-config would need to be provided.
+
+===== OBJ2 Q4: How does traffic from VLAN 10 reach the internet? Walk me through the path. =====
+
+Retrieved 4 chunks (lexical TF-IDF retrieval):
+  chunk 1 source=network_design_doc.md distance=1.316
+    ## 5. Traffic flow reference: VLAN 10 → Internet
+    
+    1. Client on VLAN 10 (Finance, 10.20.10.0/24) sends traffic to
+       default gateway `10.20.10.1` on Switch1.
+    2. Switch1 forwards via OSPF default route learned from Router1 out
+       `Gi1/0/24` → `10.10.0.1`.
+    3. Router1 forwards the packet via its static default
+       `ip route 0.0.0.0 0.0.0.0 203.0.113.1`, BUT for user VLAN traffic
+       the policy requires 
+    ...
+  chunk 2 source=switch1_running_config.txt distance=1.716
+    ! ==========================================================================
+    ! Device: Switch1  (dist-sw-01)
+    ! Role: HQ distribution switch, L3 inter-VLAN routing, OSPF area 0 stub
+    ! Platform: Catalyst C9300-48P  IOS-XE 17.12.3
+    ! ==========================================================================
+    hostname Switch1
+    !
+    vlan 10
+     name FINANCE
+    vlan 20
+     name ENGINEERING
+    vlan 50
+     name DMZ_TRANSIT
+    vl
+    ...
+  chunk 3 source=network_design_doc.md distance=1.798
+    ## 6. Security zones
+    
+    - **outside** (security-level 0) = ISP handoff (198.51.100.0/30)
+    - **inside** (security-level 100) = HQ user VLANs and transit links
+    - **dmz** (security-level 50) = published-service servers in 10.30.0.0/24
+    
+    Inbound policy from outside is defined by ACL `OUTSIDE_IN` on
+    Firewall1 (see firewall1 running-config for full rules). Only
+    published services on 198.51.100.10–12 are per
+    ...
+  chunk 4 source=network_design_doc.md distance=1.819
+    > **Operational note (2026-03-18):** the Switch1 ↔ Firewall1 session
+    > flipped to Idle after a password rotation on Firewall1 that was not
+    > mirrored on Switch1. Both ends **must** carry the same `neighbor …
+    > password` value; otherwise the session never leaves Idle.
+
+Answer:
+Traffic from VLAN 10 (Finance, 10.20.10.0/24) reaches the internet through the following path [source: network_design_doc.md]:
+
+1. **Client to default gateway**: A client on VLAN 10 sends traffic to its default gateway `10.20.10.1` on Switch1 [source: network_design_doc.md].
+
+2. **Switch1 to Router1**: Switch1 forwards the traffic via an OSPF default route learned from Router1, sending it out interface `Gi1/0/24` to `10.10.0.1` [source: network_design_doc.md].
+
+3. **Router1 policy-based routing to Firewall1**: Although Router1 has a static default route `ip route 0.0.0.0 0.0.0.0 203.0.113.1`, user VLAN traffic is steered differently. A route-map on Router1 directs traffic from `10.20.0.0/16` toward `10.10.0.6` (Firewall1) [source: network_design_doc.md].
+
+4. **Firewall1 NAT and forwarding**: Firewall1 applies the `inside → outside` policy, performs PAT (Port Address Translation) on the source using the `USER_VLANS` object (NAT to interface `outside`), and forwards the traffic to the ISP via `198.51.100.1` [source: network_design_doc.md].
+
+5. **Return traffic**: Return traffic follows the reverse path with stateful inspection performed by Firewall1 [source: network_design_doc.md].
+
+===== OBJ2 Q5: What brand and part number of optical SFP is installed in Router1 Gi0/0/3? =====
+
+Retrieved 4 chunks (lexical TF-IDF retrieval):
+  chunk 1 source=network_design_doc.md distance=1.594
+    ### Point-to-point transit
+    
+    | Link                               | Subnet            |
+    |------------------------------------|-------------------|
+    | Router1 Gi0/0/1 – Switch1 Gi1/0/24 | 10.10.0.0/30      |
+    | Router1 Gi0/0/2 – Firewall1 Gi1    | 10.10.0.4/30      |
+    | Router1 Gi0/0/3 – secondary MDF    | 10.10.0.8/30      |
+    | Switch1 – Firewall1 (DMZ transit)  | 10.10.0.8/30 (shared logical) |
+    | Rout
+    ...
+  chunk 2 source=network_design_doc.md distance=1.786
+    ### BGP
+    
+    - Internal AS: `65001`. iBGP is full-mesh between Router1, Switch1
+      (AS 65002 confederation sub-AS), and Firewall1 (AS 65003 confederation
+      sub-AS). See §4 for the peering matrix.
+    - External AS: `64501` (ISP-A), peered only from Router1 over
+      203.0.113.0/30.
+    - All iBGP sessions use `update-source Loopback0` and `next-hop-self`.
+    - eBGP toward ISP-A is MD5-authenticated (password managed
+    ...
+  chunk 3 source=runbook_bgp_idle_troubleshooting.md distance=1.835
+    # Runbook: BGP neighbor stuck in Idle
+    
+    **Applies to:** Cisco IOS-XE and Cisco Firepower FTD peers inside AS 65001
+    **Severity:** P2 (service-affecting if peer is in the forwarding path)
+    **Owner:** NetOps on-call
+    **Last reviewed:** 2026-04-02
+    
+    ## Symptoms
+    
+    - `show ip bgp summary` on the local peer shows `State/PfxRcd = Idle`
+    - `show logging | include BGP` shows repeated messages such as
+      - `%BGP-5-
+    ...
+  chunk 4 source=runbook_bgp_idle_troubleshooting.md distance=1.848
+    ## Triage
+    
+    1. On the local peer:
+       ```
+       show ip bgp neighbor <peer-ip>
+       show logging | include BGP|TCP
+       ping <peer-loopback> source Loopback0
+       ```
+    2. If ping succeeds but BGP is still Idle, check for MD5 errors in the
+       log with `%TCP-6-BADAUTH`. That is the fingerprint of cause #1.
+    3. Compare the configured password on both ends:
+       ```
+       show running-config | section router bgp
+       ```
+    ...
+
+Answer:
+I don't have enough information in the provided documents to answer that.
+
+The context describes that Router1 Gi0/0/3 connects to a secondary MDF using subnet 10.10.0.8/30 [source: network_design_doc.md], but no information about the brand, part number, or type of optical SFP transceiver installed in that interface is provided in any of the passages.

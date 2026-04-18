@@ -1,0 +1,35 @@
+! ==========================================================================
+! Device: Switch2  (branch-sw-01)
+! Role: Branch access switch, trunk uplink to Router2
+! Platform: Catalyst C9200-24T  IOS-XE 17.12.3
+! ==========================================================================
+hostname Switch2
+!
+vlan 30
+ name SALES
+vlan 40
+ name VOICE
+vlan 99
+ name MGMT
+!
+interface GigabitEthernet1/0/1
+ description Sales user access
+ switchport mode access
+ switchport access vlan 30
+ switchport voice vlan 40
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/24
+ description Trunk uplink to Router2 Gi0/0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 30,40,99
+ switchport trunk native vlan 99
+!
+interface Vlan99
+ description Management SVI
+ ip address 192.168.99.20 255.255.255.0
+!
+ip default-gateway 192.168.99.1
+!
+end

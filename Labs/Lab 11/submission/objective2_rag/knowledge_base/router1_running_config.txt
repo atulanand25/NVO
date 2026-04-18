@@ -1,0 +1,98 @@
+! ==========================================================================
+! Device: Router1  (core-rtr-01)
+! Role: HQ core router / OSPF ABR / eBGP edge to ISP-A
+! Captured: 2026-04-15 by atul@nexthop.ai via `show running-config`
+! Platform: Cisco ISR4451-X/K9  IOS-XE 17.9.4a
+! ==========================================================================
+version 17.9
+hostname Router1
+!
+ip domain name corp.nexthop.ai
+!
+vrf definition MGMT
+ rd 65001:99
+ address-family ipv4
+ exit-address-family
+!
+username atul privilege 15 secret 9 $9$abcd...redacted
+!
+interface Loopback0
+ description Router-ID
+ ip address 10.255.255.1 255.255.255.255
+ ip ospf 1 area 0
+!
+interface GigabitEthernet0/0/0
+ description UPLINK to ISP-A (eBGP AS64501)
+ ip address 203.0.113.2 255.255.255.252
+ ip access-group INBOUND-FROM-ISP in
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ description To Switch1 (dist-sw-01) Gi1/0/24
+ ip address 10.10.0.1 255.255.255.252
+ ip ospf 1 area 0
+ ip ospf network point-to-point
+ no shutdown
+!
+interface GigabitEthernet0/0/2
+ description To Firewall1 (edge-fw-01) Gi1
+ ip address 10.10.0.5 255.255.255.252
+ ip ospf 1 area 0
+ ip ospf network point-to-point
+ no shutdown
+!
+interface GigabitEthernet0/0/3
+ description SPARE/transit to secondary MDF
+ ip address 10.10.0.9 255.255.255.252
+ no shutdown
+!
+router ospf 1
+ router-id 10.255.255.1
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/1
+ no passive-interface GigabitEthernet0/0/2
+ network 10.10.0.0 0.0.0.3 area 0
+ network 10.10.0.4 0.0.0.3 area 0
+ network 10.20.0.0 0.0.255.255 area 10
+!
+router bgp 65001
+ bgp router-id 10.255.255.1
+ bgp log-neighbor-changes
+ neighbor 203.0.113.1 remote-as 64501
+ neighbor 203.0.113.1 description ISP-A-eBGP
+ neighbor 203.0.113.1 password 7 ISP-A-SHARED-SECRET
+ neighbor 10.10.0.6 remote-as 65001
+ neighbor 10.10.0.6 description iBGP-to-edge-fw-01
+ neighbor 10.10.0.6 update-source Loopback0
+ address-family ipv4
+  network 10.20.0.0 mask 255.255.0.0
+  neighbor 203.0.113.1 activate
+  neighbor 203.0.113.1 soft-reconfiguration inbound
+  neighbor 203.0.113.1 prefix-list DENY-BOGONS in
+  neighbor 10.10.0.6 activate
+  neighbor 10.10.0.6 next-hop-self
+ exit-address-family
+!
+ip access-list extended INBOUND-FROM-ISP
+ deny ip 10.0.0.0 0.255.255.255 any log
+ deny ip 172.16.0.0 0.15.255.255 any log
+ deny ip 192.168.0.0 0.0.255.255 any log
+ permit tcp any any established
+ permit icmp any any echo-reply
+ deny ip any any log
+!
+ip prefix-list DENY-BOGONS seq 5 deny 0.0.0.0/8 le 32
+ip prefix-list DENY-BOGONS seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list DENY-BOGONS seq 15 deny 127.0.0.0/8 le 32
+ip prefix-list DENY-BOGONS seq 20 deny 169.254.0.0/16 le 32
+ip prefix-list DENY-BOGONS seq 25 deny 172.16.0.0/12 le 32
+ip prefix-list DENY-BOGONS seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list DENY-BOGONS seq 99 permit 0.0.0.0/0 le 24
+!
+ip route 0.0.0.0 0.0.0.0 203.0.113.1 name DEFAULT-TO-ISP
+!
+ntp server 10.20.0.123
+logging host 10.20.0.200 transport udp port 514
+snmp-server community nexthop-ro RO
+!
+end

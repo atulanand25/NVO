@@ -1,0 +1,62 @@
+! ==========================================================================
+! Device: Router2  (branch-rtr-01)
+! Role: Branch site router, OSPF area 10, iBGP to Router1 for internet egress
+! Captured: 2026-04-15 by atul@nexthop.ai
+! Platform: Cisco ISR4331/K9  IOS-XE 17.9.4a
+! ==========================================================================
+version 17.9
+hostname Router2
+!
+interface Loopback0
+ description Router-ID
+ ip address 10.255.255.4 255.255.255.255
+ ip ospf 1 area 10
+!
+interface GigabitEthernet0/0/0
+ description UPLINK to Router1 Gi0/0/1 via MPLS
+ ip address 10.10.0.14 255.255.255.252
+ ip ospf 1 area 10
+ ip ospf network point-to-point
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ description Branch LAN - VLAN 30 (Sales)
+ no ip address
+ no shutdown
+!
+interface GigabitEthernet0/0/1.30
+ description VLAN 30 - Sales branch users
+ encapsulation dot1Q 30
+ ip address 10.20.30.1 255.255.255.0
+ ip ospf 1 area 10
+ ip helper-address 10.20.0.50
+!
+interface GigabitEthernet0/0/1.40
+ description VLAN 40 - Branch voice
+ encapsulation dot1Q 40
+ ip address 10.20.40.1 255.255.255.0
+ ip ospf 1 area 10
+ ip helper-address 10.20.0.50
+!
+router ospf 1
+ router-id 10.255.255.4
+ area 10 stub no-summary
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/0
+ network 10.10.0.12 0.0.0.3 area 10
+ network 10.20.30.0 0.0.0.255 area 10
+ network 10.20.40.0 0.0.0.255 area 10
+!
+router bgp 65001
+ bgp router-id 10.255.255.4
+ neighbor 10.255.255.1 remote-as 65001
+ neighbor 10.255.255.1 update-source Loopback0
+ neighbor 10.255.255.1 description iBGP-to-Router1
+ address-family ipv4
+  network 10.20.30.0 mask 255.255.255.0
+  network 10.20.40.0 mask 255.255.255.0
+  neighbor 10.255.255.1 activate
+  neighbor 10.255.255.1 next-hop-self
+ exit-address-family
+!
+end

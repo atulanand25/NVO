@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sdn-controller
+  labels:
+    app: ryu
+spec:
+  containers:
+  - name: ryu
+    image: osrg/ryu
+    command: ["ryu-manager"]
+    args: ["--verbose", "ryu.app.simple_switch"]
+    ports:
+    - containerPort: 6633

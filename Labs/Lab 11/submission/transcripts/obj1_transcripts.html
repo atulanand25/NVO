@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+.r1 {color: #008000; text-decoration-color: #008000}
+.r2 {font-weight: bold}
+.r3 {color: #00ff00; text-decoration-color: #00ff00}
+.r4 {color: #008080; text-decoration-color: #008080; font-weight: bold}
+.r5 {color: #808000; text-decoration-color: #808000}
+.r6 {color: #800080; text-decoration-color: #800080; font-weight: bold}
+.r7 {color: #f8f8f2; text-decoration-color: #f8f8f2; background-color: #272822}
+.r8 {background-color: #272822}
+.r9 {color: #ff4689; text-decoration-color: #ff4689; background-color: #272822}
+.r10 {color: #e6db74; text-decoration-color: #e6db74; background-color: #272822}
+.r11 {color: #ae81ff; text-decoration-color: #ae81ff; background-color: #272822}
+.r12 {color: #ed007e; text-decoration-color: #ed007e; background-color: #1e0010}
+.r13 {color: #66d9ef; text-decoration-color: #66d9ef; background-color: #272822}
+.r14 {color: #000080; text-decoration-color: #000080}
+body {
+    color: #000000;
+    background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+    <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><code style="font-family:inherit"><span class="r1">╭──────────────────────────────────── MCP ─────────────────────────────────────╮</span>
+<span class="r1">│</span> Connected to MCP server. Tools discovered: <span class="r2">list_devices, get_interfaces, </span>    <span class="r1">│</span>
+<span class="r1">│</span> <span class="r2">get_bgp_neighbors, get_route_table, get_device_health, get_logs, ping_device</span> <span class="r1">│</span>
+<span class="r1">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r3">───────── </span><span class="r4">QUERY</span>: What is the status of all interfaces on core-rtr-<span class="r4">01</span>?<span class="r3"> ──────────</span>
+<span class="r5">→ tool_call</span> <span class="r6">get_interfaces</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;core-rtr-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;interfaces&quot;</span><span class="r7">: [</span><span class="r8">                                                               </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;name&quot;</span><span class="r7">: </span><span class="r10">&quot;GigabitEthernet0/0/0&quot;</span><span class="r7">,</span><span class="r8">                                           </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;UPLINK to ISP-A&quot;</span><span class="r7">,</span><span class="r8">                                         </span>
+<span class="r7">      </span><span class="r9">&quot;ipv4&quot;</span><span class="r7">: </span><span class="r10">&quot;203.0.113.2/30&quot;</span><span class="r7">,</span><span class="r8">                                                 </span>
+<span class="r7">      </span><span class="r9">&quot;admin_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                     </span>
+<span class="r7">      </span><span class="r9">&quot;oper_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;speed_mbps&quot;</span><span class="r7">: </span><span class="r11">1000</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;input_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                        </span>
+<span class="r7">      </span><span class="r9">&quot;output_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;crc_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r8">                                                           </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;name&quot;</span><span class="r7">: </span><span class="r10">&quot;GigabitEthernet0/0/1&quot;</span><span class="r7">,</span><span class="r8">                                           </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;To dist-sw-01 Gi1/0/24&quot;</span><span class="r7">,</span><span class="r8">                                  </span>
+<span class="r7">      </span><span class="r9">&quot;ipv4&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.1/30&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;admin_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                     </span>
+<span class="r7">      </span><span class="r9">&quot;oper_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;speed_mbps&quot;</span><span class="r7">: </span><span class="r11">1000</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;input_errors&quot;</span><span class="r7">: </span><span class="r11">12</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;output_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;crc_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r8">                                                           </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;name&quot;</span><span class="r7">: </span><span class="r10">&quot;GigabitEthernet0/0/2&quot;</span><span class="r7">,</span><span class="r8">                                           </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;To edge-fw-01 Gi1&quot;</span><span class="r7">,</span><span class="r8">                                       </span>
+<span class="r7">      </span><span class="r9">&quot;ipv4&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.5/30&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;admin_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                     </span>
+<span class="r7">      </span><span class="r9">&quot;oper_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;speed_mbps&quot;</span><span class="r7">: </span><span class="r11">1000</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;input_errors&quot;</span><span class="r7">: </span><span class="r11">3</span><span class="r7">,</span><span class="r8">                                                        </span>
+<span class="r7">      </span><span class="r9">&quot;output_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;crc_errors&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r8">                                                           </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;name&quot;</span><span class="r7">: </span><span class="r10">&quot;GigabitEthernet0/0/3&quot;</span><span class="r7">,</span><span class="r8">                                           </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;SPARE/transit to secondary MDF&quot;</span><span class="r7">,</span><span class="r8">                          </span>
+<span class="r7">      </span><span class="r9">&quot;ipv4&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.9/30&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;admin_status&quot;</span><span class="r7">: </span><span class="r10">&quot;up&quot;</span><span class="r7">,</span><span class="r8">                                                     </span>
+<span class="r7">      </span><span class="r9">&quot;oper_status&quot;</span><span class="r7">: </span><span class="r10">&quot;down&quot;</span><span class="r7">,</span><span class="r8">                                                    </span>
+<span class="r7">      </span><span class="r9">&quot;speed_mbps&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                          </span>
+<span class="r7">      </span><span class="r9">&quot;input_errors&quot;</span><span class="r7">: </span><span class="r11">4871</span><span class="r7">,</span><span class="r8">                                                     </span>
+<span class="r7">      </span><span class="r9">&quot;output_errors&quot;</span><span class="r7">: </span><span class="r11">29</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;crc_errors&quot;</span><span class="r7">: </span><span class="r11">4602</span><span class="r8">                                                        </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;name&quot;</span><span class="r7">: </span><span class="r8">                                                                  </span>
+<span class="r12">...</span><span class="r7"> [</span><span class="r13">trun</span><span class="r12">ca</span><span class="r13">te</span><span class="r12">d</span><span class="r7">]</span><span class="r8">                                                                 </span>
+<span class="r14">╭────────────────────────────── Claude (step 2) ───────────────────────────────╮</span>
+<span class="r14">│</span> ## Interface Status for core-rtr-01                                          <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> | Interface | Description | IP Address | Admin | Oper | Speed | Errors       <span class="r14">│</span>
+<span class="r14">│</span> (In/Out/CRC) |                                                               <span class="r14">│</span>
+<span class="r14">│</span> |-----------|-------------|------------|-------|------|-------|------------- <span class="r14">│</span>
+<span class="r14">│</span> --------|                                                                    <span class="r14">│</span>
+<span class="r14">│</span> | **GigabitEthernet0/0/0** | UPLINK to ISP-A | 203.0.113.2/30 | up | **up**  <span class="r14">│</span>
+<span class="r14">│</span> | 1000 Mbps | 0/0/0 ✓ |                                                      <span class="r14">│</span>
+<span class="r14">│</span> | **GigabitEthernet0/0/1** | To dist-sw-01 Gi1/0/24 | 10.10.0.1/30 | up |    <span class="r14">│</span>
+<span class="r14">│</span> **up** | 1000 Mbps | 12/0/0 |                                                <span class="r14">│</span>
+<span class="r14">│</span> | **GigabitEthernet0/0/2** | To edge-fw-01 Gi1 | 10.10.0.5/30 | up | **up**  <span class="r14">│</span>
+<span class="r14">│</span> | 1000 Mbps | 3/0/0 |                                                        <span class="r14">│</span>
+<span class="r14">│</span> | **GigabitEthernet0/0/3** | SPARE/transit to secondary MDF | 10.10.0.9/30 | <span class="r14">│</span>
+<span class="r14">│</span> up | **down** | 0 Mbps | 4871/29/4602 ⚠️ |                                   <span class="r14">│</span>
+<span class="r14">│</span> | **Loopback0** | Router-ID | 10.255.255.1/32 | up | **up** | 8000 Mbps |    <span class="r14">│</span>
+<span class="r14">│</span> 0/0/0 ✓ |                                                                    <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> ### Key Findings:                                                            <span class="r14">│</span>
+<span class="r14">│</span> - **3 of 4 physical interfaces are up and operational**                      <span class="r14">│</span>
+<span class="r14">│</span> - **⚠️ GigabitEthernet0/0/3** is **down** (admin up/oper down) with          <span class="r14">│</span>
+<span class="r14">│</span> significant errors (4,602 CRC errors, 4,871 input errors) – indicates        <span class="r14">│</span>
+<span class="r14">│</span> physical layer or cable issues                                               <span class="r14">│</span>
+<span class="r14">│</span> - Minor input errors on Gi0/0/1 (12) and Gi0/0/2 (3) are within normal       <span class="r14">│</span>
+<span class="r14">│</span> tolerances                                                                   <span class="r14">│</span>
+<span class="r14">│</span> - ISP uplink and internal connections to dist-sw-01 and edge-fw-01 are       <span class="r14">│</span>
+<span class="r14">│</span> healthy                                                                      <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r1">╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮</span>
+<span class="r1">│</span> ## Interface Status for core-rtr-01                                          <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> | Interface | Description | IP Address | Admin | Oper | Speed | Errors       <span class="r1">│</span>
+<span class="r1">│</span> (In/Out/CRC) |                                                               <span class="r1">│</span>
+<span class="r1">│</span> |-----------|-------------|------------|-------|------|-------|------------- <span class="r1">│</span>
+<span class="r1">│</span> --------|                                                                    <span class="r1">│</span>
+<span class="r1">│</span> | **GigabitEthernet0/0/0** | UPLINK to ISP-A | 203.0.113.2/30 | up | **up**  <span class="r1">│</span>
+<span class="r1">│</span> | 1000 Mbps | 0/0/0 ✓ |                                                      <span class="r1">│</span>
+<span class="r1">│</span> | **GigabitEthernet0/0/1** | To dist-sw-01 Gi1/0/24 | 10.10.0.1/30 | up |    <span class="r1">│</span>
+<span class="r1">│</span> **up** | 1000 Mbps | 12/0/0 |                                                <span class="r1">│</span>
+<span class="r1">│</span> | **GigabitEthernet0/0/2** | To edge-fw-01 Gi1 | 10.10.0.5/30 | up | **up**  <span class="r1">│</span>
+<span class="r1">│</span> | 1000 Mbps | 3/0/0 |                                                        <span class="r1">│</span>
+<span class="r1">│</span> | **GigabitEthernet0/0/3** | SPARE/transit to secondary MDF | 10.10.0.9/30 | <span class="r1">│</span>
+<span class="r1">│</span> up | **down** | 0 Mbps | 4871/29/4602 ⚠️ |                                   <span class="r1">│</span>
+<span class="r1">│</span> | **Loopback0** | Router-ID | 10.255.255.1/32 | up | **up** | 8000 Mbps |    <span class="r1">│</span>
+<span class="r1">│</span> 0/0/0 ✓ |                                                                    <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> ### Key Findings:                                                            <span class="r1">│</span>
+<span class="r1">│</span> - **3 of 4 physical interfaces are up and operational**                      <span class="r1">│</span>
+<span class="r1">│</span> - **⚠️ GigabitEthernet0/0/3** is **down** (admin up/oper down) with          <span class="r1">│</span>
+<span class="r1">│</span> significant errors (4,602 CRC errors, 4,871 input errors) – indicates        <span class="r1">│</span>
+<span class="r1">│</span> physical layer or cable issues                                               <span class="r1">│</span>
+<span class="r1">│</span> - Minor input errors on Gi0/0/1 (12) and Gi0/0/2 (3) are within normal       <span class="r1">│</span>
+<span class="r1">│</span> tolerances                                                                   <span class="r1">│</span>
+<span class="r1">│</span> - ISP uplink and internal connections to dist-sw-01 and edge-fw-01 are       <span class="r1">│</span>
+<span class="r1">│</span> healthy                                                                      <span class="r1">│</span>
+<span class="r1">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r3">──── </span><span class="r4">QUERY</span>: Are there any BGP neighbors that are not in Established state?<span class="r3"> ─────</span>
+<span class="r14">╭────────────────────────────── Claude (step 1) ───────────────────────────────╮</span>
+<span class="r14">│</span> I&#x27;ll check the BGP neighbor status across all devices to identify any        <span class="r14">│</span>
+<span class="r14">│</span> neighbors not in Established state.                                          <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r5">→ tool_call</span> <span class="r6">list_devices</span><span class="r2">({})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;devices&quot;</span><span class="r7">: [</span><span class="r8">                                                                  </span>
+<span class="r7">    </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                              </span>
+<span class="r7">    </span><span class="r10">&quot;dist-sw-01&quot;</span><span class="r7">,</span><span class="r8">                                                               </span>
+<span class="r7">    </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r8">                                                                </span>
+<span class="r7">  ]</span><span class="r8">                                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r14">╭────────────────────────────── Claude (step 2) ───────────────────────────────╮</span>
+<span class="r14">│</span> Now let me check the BGP neighbors on all devices:                           <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r5">→ tool_call</span> <span class="r6">get_bgp_neighbors</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;core-rtr-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;neighbors&quot;</span><span class="r7">: [</span><span class="r8">                                                                </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;peer_ip&quot;</span><span class="r7">: </span><span class="r10">&quot;203.0.113.1&quot;</span><span class="r7">,</span><span class="r8">                                                 </span>
+<span class="r7">      </span><span class="r9">&quot;remote_asn&quot;</span><span class="r7">: </span><span class="r11">64501</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;local_asn&quot;</span><span class="r7">: </span><span class="r11">65001</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;state&quot;</span><span class="r7">: </span><span class="r10">&quot;Established&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;30d21h&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_received&quot;</span><span class="r7">: </span><span class="r11">842312</span><span class="r7">,</span><span class="r8">                                              </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_sent&quot;</span><span class="r7">: </span><span class="r11">12</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;ISP-A eBGP&quot;</span><span class="r8">                                               </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;peer_ip&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.6&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;remote_asn&quot;</span><span class="r7">: </span><span class="r11">65003</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;local_asn&quot;</span><span class="r7">: </span><span class="r11">65001</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;state&quot;</span><span class="r7">: </span><span class="r10">&quot;Established&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;14d02h&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_received&quot;</span><span class="r7">: </span><span class="r11">24</span><span class="r7">,</span><span class="r8">                                                  </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_sent&quot;</span><span class="r7">: </span><span class="r11">842336</span><span class="r7">,</span><span class="r8">                                                  </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;iBGP to edge-fw-01&quot;</span><span class="r8">                                       </span>
+<span class="r7">    }</span><span class="r8">                                                                           </span>
+<span class="r7">  ]</span><span class="r8">                                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_bgp_neighbors</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;dist-sw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;dist-sw-01&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;neighbors&quot;</span><span class="r7">: [</span><span class="r8">                                                                </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;peer_ip&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.1&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;remote_asn&quot;</span><span class="r7">: </span><span class="r11">65001</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;local_asn&quot;</span><span class="r7">: </span><span class="r11">65002</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;state&quot;</span><span class="r7">: </span><span class="r10">&quot;Established&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;14d02h&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_received&quot;</span><span class="r7">: </span><span class="r11">12</span><span class="r7">,</span><span class="r8">                                                  </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_sent&quot;</span><span class="r7">: </span><span class="r11">6</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;iBGP to core-rtr-01&quot;</span><span class="r8">                                      </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;peer_ip&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.10&quot;</span><span class="r7">,</span><span class="r8">                                                  </span>
+<span class="r7">      </span><span class="r9">&quot;remote_asn&quot;</span><span class="r7">: </span><span class="r11">65003</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;local_asn&quot;</span><span class="r7">: </span><span class="r11">65002</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;state&quot;</span><span class="r7">: </span><span class="r10">&quot;Idle&quot;</span><span class="r7">,</span><span class="r8">                                                          </span>
+<span class="r7">      </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;never&quot;</span><span class="r7">,</span><span class="r8">                                                        </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_received&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_sent&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;iBGP to edge-fw-01 (auth mismatch suspected)&quot;</span><span class="r8">             </span>
+<span class="r7">    }</span><span class="r8">                                                                           </span>
+<span class="r7">  ]</span><span class="r8">                                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_bgp_neighbors</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;edge-fw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;neighbors&quot;</span><span class="r7">: [</span><span class="r8">                                                                </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;peer_ip&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.5&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;remote_asn&quot;</span><span class="r7">: </span><span class="r11">65001</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;local_asn&quot;</span><span class="r7">: </span><span class="r11">65003</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;state&quot;</span><span class="r7">: </span><span class="r10">&quot;Established&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;14d02h&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_received&quot;</span><span class="r7">: </span><span class="r11">842336</span><span class="r7">,</span><span class="r8">                                              </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_sent&quot;</span><span class="r7">: </span><span class="r11">24</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;iBGP to core-rtr-01&quot;</span><span class="r8">                                      </span>
+<span class="r7">    },</span><span class="r8">                                                                          </span>
+<span class="r7">    {</span><span class="r8">                                                                           </span>
+<span class="r7">      </span><span class="r9">&quot;peer_ip&quot;</span><span class="r7">: </span><span class="r10">&quot;10.10.0.9&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;remote_asn&quot;</span><span class="r7">: </span><span class="r11">65002</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">      </span><span class="r9">&quot;local_asn&quot;</span><span class="r7">: </span><span class="r11">65003</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;state&quot;</span><span class="r7">: </span><span class="r10">&quot;Idle&quot;</span><span class="r7">,</span><span class="r8">                                                          </span>
+<span class="r7">      </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;never&quot;</span><span class="r7">,</span><span class="r8">                                                        </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_received&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">      </span><span class="r9">&quot;prefixes_sent&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">      </span><span class="r9">&quot;description&quot;</span><span class="r7">: </span><span class="r10">&quot;iBGP to dist-sw-01 (auth mismatch)&quot;</span><span class="r8">                       </span>
+<span class="r7">    }</span><span class="r8">                                                                           </span>
+<span class="r7">  ]</span><span class="r8">                                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r14">╭────────────────────────────── Claude (step 3) ───────────────────────────────╮</span>
+<span class="r14">│</span> **Yes, there are 2 BGP neighbors not in Established state:**                 <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> 1. **dist-sw-01** → peer 10.10.0.10 (edge-fw-01)                             <span class="r14">│</span>
+<span class="r14">│</span>    - State: **Idle**                                                         <span class="r14">│</span>
+<span class="r14">│</span>    - Remote ASN: 65003                                                       <span class="r14">│</span>
+<span class="r14">│</span>    - Uptime: never                                                           <span class="r14">│</span>
+<span class="r14">│</span>    - Description: &quot;iBGP to edge-fw-01 (auth mismatch suspected)&quot;             <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> 2. **edge-fw-01** → peer 10.10.0.9 (dist-sw-01)                              <span class="r14">│</span>
+<span class="r14">│</span>    - State: **Idle**                                                         <span class="r14">│</span>
+<span class="r14">│</span>    - Remote ASN: 65002                                                       <span class="r14">│</span>
+<span class="r14">│</span>    - Uptime: never                                                           <span class="r14">│</span>
+<span class="r14">│</span>    - Description: &quot;iBGP to dist-sw-01 (auth mismatch)&quot;                       <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> Both entries describe the same failed peering session between dist-sw-01 and <span class="r14">│</span>
+<span class="r14">│</span> edge-fw-01. The descriptions indicate an **authentication mismatch** is      <span class="r14">│</span>
+<span class="r14">│</span> preventing the session from establishing. You should verify BGP MD5          <span class="r14">│</span>
+<span class="r14">│</span> passwords or authentication keys are configured identically on both sides.   <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r1">╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮</span>
+<span class="r1">│</span> **Yes, there are 2 BGP neighbors not in Established state:**                 <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> 1. **dist-sw-01** → peer 10.10.0.10 (edge-fw-01)                             <span class="r1">│</span>
+<span class="r1">│</span>    - State: **Idle**                                                         <span class="r1">│</span>
+<span class="r1">│</span>    - Remote ASN: 65003                                                       <span class="r1">│</span>
+<span class="r1">│</span>    - Uptime: never                                                           <span class="r1">│</span>
+<span class="r1">│</span>    - Description: &quot;iBGP to edge-fw-01 (auth mismatch suspected)&quot;             <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> 2. **edge-fw-01** → peer 10.10.0.9 (dist-sw-01)                              <span class="r1">│</span>
+<span class="r1">│</span>    - State: **Idle**                                                         <span class="r1">│</span>
+<span class="r1">│</span>    - Remote ASN: 65002                                                       <span class="r1">│</span>
+<span class="r1">│</span>    - Uptime: never                                                           <span class="r1">│</span>
+<span class="r1">│</span>    - Description: &quot;iBGP to dist-sw-01 (auth mismatch)&quot;                       <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> Both entries describe the same failed peering session between dist-sw-01 and <span class="r1">│</span>
+<span class="r1">│</span> edge-fw-01. The descriptions indicate an **authentication mismatch** is      <span class="r1">│</span>
+<span class="r1">│</span> preventing the session from establishing. You should verify BGP MD5          <span class="r1">│</span>
+<span class="r1">│</span> passwords or authentication keys are configured identically on both sides.   <span class="r1">│</span>
+<span class="r1">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r3">───────── </span><span class="r4">QUERY</span>: Can core-rtr-<span class="r4">01</span> reach edge-fw-<span class="r4">01</span>? Check connectivity.<span class="r3"> ─────────</span>
+<span class="r14">╭────────────────────────────── Claude (step 1) ───────────────────────────────╮</span>
+<span class="r14">│</span> I&#x27;ll check the connectivity between core-rtr-01 and edge-fw-01 by running a  <span class="r14">│</span>
+<span class="r14">│</span> ping test.                                                                   <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r5">→ tool_call</span> <span class="r6">ping_device</span><span class="r2">({</span><span class="r1">&quot;source&quot;</span>: <span class="r1">&quot;core-rtr-01&quot;</span>, <span class="r1">&quot;destination&quot;</span>: <span class="r1">&quot;edge-fw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;source&quot;</span><span class="r7">: </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;destination&quot;</span><span class="r7">: </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r7">,</span><span class="r8">                                                  </span>
+<span class="r7">  </span><span class="r9">&quot;resolved_device&quot;</span><span class="r7">: </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r7">,</span><span class="r8">                                              </span>
+<span class="r7">  </span><span class="r9">&quot;count&quot;</span><span class="r7">: </span><span class="r11">5</span><span class="r7">,</span><span class="r8">                                                                   </span>
+<span class="r7">  </span><span class="r9">&quot;reachable&quot;</span><span class="r7">: </span><span class="r13">true</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;rtt_ms_avg&quot;</span><span class="r7">: </span><span class="r11">1.2</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;loss_percent&quot;</span><span class="r7">: </span><span class="r11">0</span><span class="r8">                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r14">╭────────────────────────────── Claude (step 2) ───────────────────────────────╮</span>
+<span class="r14">│</span> **✅ Connectivity confirmed**                                                <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> core-rtr-01 **can** reach edge-fw-01:                                        <span class="r14">│</span>
+<span class="r14">│</span> - **Reachable**: Yes                                                         <span class="r14">│</span>
+<span class="r14">│</span> - **Packet loss**: 0%                                                        <span class="r14">│</span>
+<span class="r14">│</span> - **Average RTT**: 1.2 ms                                                    <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> The connection is healthy with no packet loss and low latency.               <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r1">╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮</span>
+<span class="r1">│</span> **✅ Connectivity confirmed**                                                <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> core-rtr-01 **can** reach edge-fw-01:                                        <span class="r1">│</span>
+<span class="r1">│</span> - **Reachable**: Yes                                                         <span class="r1">│</span>
+<span class="r1">│</span> - **Packet loss**: 0%                                                        <span class="r1">│</span>
+<span class="r1">│</span> - **Average RTT**: 1.2 ms                                                    <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> The connection is healthy with no packet loss and low latency.               <span class="r1">│</span>
+<span class="r1">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r3">─ </span><span class="r4">QUERY</span>: Which device has the highest CPU utilization? Should I be concerned?<span class="r3"> ──</span>
+<span class="r14">╭────────────────────────────── Claude (step 1) ───────────────────────────────╮</span>
+<span class="r14">│</span> I&#x27;ll check the CPU utilization across all devices to identify which one is   <span class="r14">│</span>
+<span class="r14">│</span> highest and whether it&#x27;s concerning.                                         <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r5">→ tool_call</span> <span class="r6">list_devices</span><span class="r2">({})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;devices&quot;</span><span class="r7">: [</span><span class="r8">                                                                  </span>
+<span class="r7">    </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                              </span>
+<span class="r7">    </span><span class="r10">&quot;dist-sw-01&quot;</span><span class="r7">,</span><span class="r8">                                                               </span>
+<span class="r7">    </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r8">                                                                </span>
+<span class="r7">  ]</span><span class="r8">                                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_device_health</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;core-rtr-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;cpu_percent&quot;</span><span class="r7">: </span><span class="r11">18</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;memory_percent&quot;</span><span class="r7">: </span><span class="r11">42</span><span class="r7">,</span><span class="r8">                                                         </span>
+<span class="r7">  </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;87 days, 14:22:06&quot;</span><span class="r7">,</span><span class="r8">                                                </span>
+<span class="r7">  </span><span class="r9">&quot;os_version&quot;</span><span class="r7">: </span><span class="r10">&quot;IOS-XE 17.9.4a&quot;</span><span class="r7">,</span><span class="r8">                                               </span>
+<span class="r7">  </span><span class="r9">&quot;hardware&quot;</span><span class="r7">: </span><span class="r10">&quot;ISR4451-X/K9&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">  </span><span class="r9">&quot;serial&quot;</span><span class="r7">: </span><span class="r10">&quot;FOC24100ABC&quot;</span><span class="r8">                                                       </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_device_health</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;dist-sw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;dist-sw-01&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;cpu_percent&quot;</span><span class="r7">: </span><span class="r11">22</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;memory_percent&quot;</span><span class="r7">: </span><span class="r11">51</span><span class="r7">,</span><span class="r8">                                                         </span>
+<span class="r7">  </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;152 days, 09:11:55&quot;</span><span class="r7">,</span><span class="r8">                                               </span>
+<span class="r7">  </span><span class="r9">&quot;os_version&quot;</span><span class="r7">: </span><span class="r10">&quot;IOS-XE 17.12.3&quot;</span><span class="r7">,</span><span class="r8">                                               </span>
+<span class="r7">  </span><span class="r9">&quot;hardware&quot;</span><span class="r7">: </span><span class="r10">&quot;C9300-48P&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;serial&quot;</span><span class="r7">: </span><span class="r10">&quot;FJZ25330XYZ&quot;</span><span class="r8">                                                       </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_device_health</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;edge-fw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;cpu_percent&quot;</span><span class="r7">: </span><span class="r11">94</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;memory_percent&quot;</span><span class="r7">: </span><span class="r11">78</span><span class="r7">,</span><span class="r8">                                                         </span>
+<span class="r7">  </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;41 days, 02:47:19&quot;</span><span class="r7">,</span><span class="r8">                                                </span>
+<span class="r7">  </span><span class="r9">&quot;os_version&quot;</span><span class="r7">: </span><span class="r10">&quot;FTDv 7.4.2&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">  </span><span class="r9">&quot;hardware&quot;</span><span class="r7">: </span><span class="r10">&quot;FPR-1140&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;serial&quot;</span><span class="r7">: </span><span class="r10">&quot;JAD2710PQR&quot;</span><span class="r8">                                                        </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r14">╭────────────────────────────── Claude (step 3) ───────────────────────────────╮</span>
+<span class="r14">│</span> **Highest CPU:** **edge-fw-01** at **94%**                                   <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **Yes, you should be concerned.**                                            <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **Analysis:**                                                                <span class="r14">│</span>
+<span class="r14">│</span> - **edge-fw-01**: 94% CPU, 78% memory - This is critically high and          <span class="r14">│</span>
+<span class="r14">│</span> indicates the firewall is under severe load                                  <span class="r14">│</span>
+<span class="r14">│</span> - **dist-sw-01**: 22% CPU, 51% memory - Normal                               <span class="r14">│</span>
+<span class="r14">│</span> - **core-rtr-01**: 18% CPU, 42% memory - Normal                              <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **Recommendations:**                                                         <span class="r14">│</span>
+<span class="r14">│</span> 1. **Investigate immediately** - Check logs on edge-fw-01 for errors or      <span class="r14">│</span>
+<span class="r14">│</span> anomalies                                                                    <span class="r14">│</span>
+<span class="r14">│</span> 2. **Review traffic patterns** - The firewall may be handling a traffic      <span class="r14">│</span>
+<span class="r14">│</span> spike, DDoS, or heavy inspection load                                        <span class="r14">│</span>
+<span class="r14">│</span> 3. **Check policy configuration** - Complex security policies or deep packet <span class="r14">│</span>
+<span class="r14">│</span> inspection rules can drive high CPU                                          <span class="r14">│</span>
+<span class="r14">│</span> 4. **Consider resource upgrade** - If this is sustained load, the FPR-1140   <span class="r14">│</span>
+<span class="r14">│</span> may need more capacity or traffic offloading                                 <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> CPU above 80% sustained on a firewall can lead to:                           <span class="r14">│</span>
+<span class="r14">│</span> - Packet drops                                                               <span class="r14">│</span>
+<span class="r14">│</span> - Session timeouts                                                           <span class="r14">│</span>
+<span class="r14">│</span> - Degraded throughput                                                        <span class="r14">│</span>
+<span class="r14">│</span> - Inspection bypasses                                                        <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> Would you like me to check the logs on edge-fw-01 to see what&#x27;s driving the  <span class="r14">│</span>
+<span class="r14">│</span> load?                                                                        <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r1">╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮</span>
+<span class="r1">│</span> **Highest CPU:** **edge-fw-01** at **94%**                                   <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **Yes, you should be concerned.**                                            <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **Analysis:**                                                                <span class="r1">│</span>
+<span class="r1">│</span> - **edge-fw-01**: 94% CPU, 78% memory - This is critically high and          <span class="r1">│</span>
+<span class="r1">│</span> indicates the firewall is under severe load                                  <span class="r1">│</span>
+<span class="r1">│</span> - **dist-sw-01**: 22% CPU, 51% memory - Normal                               <span class="r1">│</span>
+<span class="r1">│</span> - **core-rtr-01**: 18% CPU, 42% memory - Normal                              <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **Recommendations:**                                                         <span class="r1">│</span>
+<span class="r1">│</span> 1. **Investigate immediately** - Check logs on edge-fw-01 for errors or      <span class="r1">│</span>
+<span class="r1">│</span> anomalies                                                                    <span class="r1">│</span>
+<span class="r1">│</span> 2. **Review traffic patterns** - The firewall may be handling a traffic      <span class="r1">│</span>
+<span class="r1">│</span> spike, DDoS, or heavy inspection load                                        <span class="r1">│</span>
+<span class="r1">│</span> 3. **Check policy configuration** - Complex security policies or deep packet <span class="r1">│</span>
+<span class="r1">│</span> inspection rules can drive high CPU                                          <span class="r1">│</span>
+<span class="r1">│</span> 4. **Consider resource upgrade** - If this is sustained load, the FPR-1140   <span class="r1">│</span>
+<span class="r1">│</span> may need more capacity or traffic offloading                                 <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> CPU above 80% sustained on a firewall can lead to:                           <span class="r1">│</span>
+<span class="r1">│</span> - Packet drops                                                               <span class="r1">│</span>
+<span class="r1">│</span> - Session timeouts                                                           <span class="r1">│</span>
+<span class="r1">│</span> - Degraded throughput                                                        <span class="r1">│</span>
+<span class="r1">│</span> - Inspection bypasses                                                        <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> Would you like me to check the logs on edge-fw-01 to see what&#x27;s driving the  <span class="r1">│</span>
+<span class="r1">│</span> load?                                                                        <span class="r1">│</span>
+<span class="r1">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r3">── </span><span class="r4">QUERY</span>: Check the health of all devices and summarize any issues you find.<span class="r3"> ───</span>
+<span class="r14">╭────────────────────────────── Claude (step 1) ───────────────────────────────╮</span>
+<span class="r14">│</span> I&#x27;ll check the health of all devices in the network. Let me start by getting <span class="r14">│</span>
+<span class="r14">│</span> the list of devices, then check each one&#x27;s health.                           <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r5">→ tool_call</span> <span class="r6">list_devices</span><span class="r2">({})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;devices&quot;</span><span class="r7">: [</span><span class="r8">                                                                  </span>
+<span class="r7">    </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                              </span>
+<span class="r7">    </span><span class="r10">&quot;dist-sw-01&quot;</span><span class="r7">,</span><span class="r8">                                                               </span>
+<span class="r7">    </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r8">                                                                </span>
+<span class="r7">  ]</span><span class="r8">                                                                             </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r14">╭────────────────────────────── Claude (step 2) ───────────────────────────────╮</span>
+<span class="r14">│</span> Now let me check the health of all three devices:                            <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r5">→ tool_call</span> <span class="r6">get_device_health</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;core-rtr-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;core-rtr-01&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;cpu_percent&quot;</span><span class="r7">: </span><span class="r11">18</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;memory_percent&quot;</span><span class="r7">: </span><span class="r11">42</span><span class="r7">,</span><span class="r8">                                                         </span>
+<span class="r7">  </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;87 days, 14:22:06&quot;</span><span class="r7">,</span><span class="r8">                                                </span>
+<span class="r7">  </span><span class="r9">&quot;os_version&quot;</span><span class="r7">: </span><span class="r10">&quot;IOS-XE 17.9.4a&quot;</span><span class="r7">,</span><span class="r8">                                               </span>
+<span class="r7">  </span><span class="r9">&quot;hardware&quot;</span><span class="r7">: </span><span class="r10">&quot;ISR4451-X/K9&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">  </span><span class="r9">&quot;serial&quot;</span><span class="r7">: </span><span class="r10">&quot;FOC24100ABC&quot;</span><span class="r8">                                                       </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_device_health</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;dist-sw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;dist-sw-01&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;cpu_percent&quot;</span><span class="r7">: </span><span class="r11">22</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;memory_percent&quot;</span><span class="r7">: </span><span class="r11">51</span><span class="r7">,</span><span class="r8">                                                         </span>
+<span class="r7">  </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;152 days, 09:11:55&quot;</span><span class="r7">,</span><span class="r8">                                               </span>
+<span class="r7">  </span><span class="r9">&quot;os_version&quot;</span><span class="r7">: </span><span class="r10">&quot;IOS-XE 17.12.3&quot;</span><span class="r7">,</span><span class="r8">                                               </span>
+<span class="r7">  </span><span class="r9">&quot;hardware&quot;</span><span class="r7">: </span><span class="r10">&quot;C9300-48P&quot;</span><span class="r7">,</span><span class="r8">                                                      </span>
+<span class="r7">  </span><span class="r9">&quot;serial&quot;</span><span class="r7">: </span><span class="r10">&quot;FJZ25330XYZ&quot;</span><span class="r8">                                                       </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r5">→ tool_call</span> <span class="r6">get_device_health</span><span class="r2">({</span><span class="r1">&quot;device_name&quot;</span>: <span class="r1">&quot;edge-fw-01&quot;</span><span class="r2">})</span>
+<span class="r7">{</span><span class="r8">                                                                               </span>
+<span class="r7">  </span><span class="r9">&quot;device&quot;</span><span class="r7">: </span><span class="r10">&quot;edge-fw-01&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;cpu_percent&quot;</span><span class="r7">: </span><span class="r11">94</span><span class="r7">,</span><span class="r8">                                                            </span>
+<span class="r7">  </span><span class="r9">&quot;memory_percent&quot;</span><span class="r7">: </span><span class="r11">78</span><span class="r7">,</span><span class="r8">                                                         </span>
+<span class="r7">  </span><span class="r9">&quot;uptime&quot;</span><span class="r7">: </span><span class="r10">&quot;41 days, 02:47:19&quot;</span><span class="r7">,</span><span class="r8">                                                </span>
+<span class="r7">  </span><span class="r9">&quot;os_version&quot;</span><span class="r7">: </span><span class="r10">&quot;FTDv 7.4.2&quot;</span><span class="r7">,</span><span class="r8">                                                   </span>
+<span class="r7">  </span><span class="r9">&quot;hardware&quot;</span><span class="r7">: </span><span class="r10">&quot;FPR-1140&quot;</span><span class="r7">,</span><span class="r8">                                                       </span>
+<span class="r7">  </span><span class="r9">&quot;serial&quot;</span><span class="r7">: </span><span class="r10">&quot;JAD2710PQR&quot;</span><span class="r8">                                                        </span>
+<span class="r7">}</span><span class="r8">                                                                               </span>
+<span class="r14">╭────────────────────────────── Claude (step 3) ───────────────────────────────╮</span>
+<span class="r14">│</span> ## Health Summary                                                            <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **⚠️ CRITICAL ISSUE FOUND:**                                                 <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **edge-fw-01** - Severe resource exhaustion:                                 <span class="r14">│</span>
+<span class="r14">│</span> - **CPU: 94%** (critically high)                                             <span class="r14">│</span>
+<span class="r14">│</span> - **Memory: 78%** (high)                                                     <span class="r14">│</span>
+<span class="r14">│</span> - Uptime: 41 days                                                            <span class="r14">│</span>
+<span class="r14">│</span> - Hardware: FPR-1140, OS: FTDv 7.4.2                                         <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **HEALTHY DEVICES:**                                                         <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **core-rtr-01** - Normal:                                                    <span class="r14">│</span>
+<span class="r14">│</span> - CPU: 18%, Memory: 42%                                                      <span class="r14">│</span>
+<span class="r14">│</span> - Uptime: 87 days                                                            <span class="r14">│</span>
+<span class="r14">│</span> - Hardware: ISR4451-X/K9, OS: IOS-XE 17.9.4a                                 <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **dist-sw-01** - Normal:                                                     <span class="r14">│</span>
+<span class="r14">│</span> - CPU: 22%, Memory: 51%                                                      <span class="r14">│</span>
+<span class="r14">│</span> - Uptime: 152 days                                                           <span class="r14">│</span>
+<span class="r14">│</span> - Hardware: C9300-48P, OS: IOS-XE 17.12.3                                    <span class="r14">│</span>
+<span class="r14">│</span>                                                                              <span class="r14">│</span>
+<span class="r14">│</span> **Recommendation:** Investigate edge-fw-01 immediately. The 94% CPU          <span class="r14">│</span>
+<span class="r14">│</span> utilization indicates the firewall is under severe load. Check traffic       <span class="r14">│</span>
+<span class="r14">│</span> patterns, active connections, inspection policies, or potential performance  <span class="r14">│</span>
+<span class="r14">│</span> issues. Consider reviewing logs for anomalies or attack indicators.          <span class="r14">│</span>
+<span class="r14">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r1">╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮</span>
+<span class="r1">│</span> ## Health Summary                                                            <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **⚠️ CRITICAL ISSUE FOUND:**                                                 <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **edge-fw-01** - Severe resource exhaustion:                                 <span class="r1">│</span>
+<span class="r1">│</span> - **CPU: 94%** (critically high)                                             <span class="r1">│</span>
+<span class="r1">│</span> - **Memory: 78%** (high)                                                     <span class="r1">│</span>
+<span class="r1">│</span> - Uptime: 41 days                                                            <span class="r1">│</span>
+<span class="r1">│</span> - Hardware: FPR-1140, OS: FTDv 7.4.2                                         <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **HEALTHY DEVICES:**                                                         <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **core-rtr-01** - Normal:                                                    <span class="r1">│</span>
+<span class="r1">│</span> - CPU: 18%, Memory: 42%                                                      <span class="r1">│</span>
+<span class="r1">│</span> - Uptime: 87 days                                                            <span class="r1">│</span>
+<span class="r1">│</span> - Hardware: ISR4451-X/K9, OS: IOS-XE 17.9.4a                                 <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **dist-sw-01** - Normal:                                                     <span class="r1">│</span>
+<span class="r1">│</span> - CPU: 22%, Memory: 51%                                                      <span class="r1">│</span>
+<span class="r1">│</span> - Uptime: 152 days                                                           <span class="r1">│</span>
+<span class="r1">│</span> - Hardware: C9300-48P, OS: IOS-XE 17.12.3                                    <span class="r1">│</span>
+<span class="r1">│</span>                                                                              <span class="r1">│</span>
+<span class="r1">│</span> **Recommendation:** Investigate edge-fw-01 immediately. The 94% CPU          <span class="r1">│</span>
+<span class="r1">│</span> utilization indicates the firewall is under severe load. Check traffic       <span class="r1">│</span>
+<span class="r1">│</span> patterns, active connections, inspection policies, or potential performance  <span class="r1">│</span>
+<span class="r1">│</span> issues. Consider reviewing logs for anomalies or attack indicators.          <span class="r1">│</span>
+<span class="r1">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="r1">Saved transcripts -&gt; ../transcripts/obj1_transcripts.json</span>
+</code></pre>
+</body>
+</html>

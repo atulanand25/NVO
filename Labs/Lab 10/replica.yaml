@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: sdn-replicaset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ryu
+  template:
+    metadata:
+      labels:
+        app: ryu
+    spec:
+      containers:
+      - name: ryu
+        image: osrg/ryu
+        command: ["ryu-manager"]
+        args: ["--verbose", "ryu.app.simple_switch"]
+        ports:
+        - containerPort: 6633

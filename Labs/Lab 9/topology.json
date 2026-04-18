@@ -2,9 +2,9 @@
   "network": {
     "name": "bgp-net",
     "subnet": "192.168.50.0/24",
-    "subnet_name": "lab9",
+    "subnet_name": "lab10",
     "gateway": "192.168.50.1",
-    "router_name": "lab9"
+    "router_name": "lab10"
   },
 
   "routers":

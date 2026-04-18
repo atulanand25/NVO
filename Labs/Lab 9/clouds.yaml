@@ -12,7 +12,7 @@ clouds:
       auth_url: http://10.224.78.170/identity
       username: "admin"
       password: "atul"
-      project_id: a0c6b381aecb4c7fa9391410a884c906
+      project_id: 7804b4a65be1412bbdb62904c16cc05e
       project_name: "admin"
       user_domain_name: "Default"
     region_name: "RegionOne"

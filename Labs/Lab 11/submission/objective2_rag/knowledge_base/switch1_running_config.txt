@@ -1,0 +1,82 @@
+! ==========================================================================
+! Device: Switch1  (dist-sw-01)
+! Role: HQ distribution switch, L3 inter-VLAN routing, OSPF area 0 stub
+! Platform: Catalyst C9300-48P  IOS-XE 17.12.3
+! ==========================================================================
+hostname Switch1
+!
+vlan 10
+ name FINANCE
+vlan 20
+ name ENGINEERING
+vlan 50
+ name DMZ_TRANSIT
+vlan 99
+ name MGMT
+!
+interface GigabitEthernet1/0/1
+ description Access - Finance user port
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/2
+ description Access - Engineering user port
+ switchport mode access
+ switchport access vlan 20
+ switchport nonegotiate
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0/24
+ description Uplink to Router1 Gi0/0/1
+ no switchport
+ ip address 10.10.0.2 255.255.255.252
+ ip ospf 1 area 0
+ ip ospf network point-to-point
+!
+interface Vlan10
+ description Finance SVI
+ ip address 10.20.10.1 255.255.255.0
+ ip helper-address 10.20.0.50
+!
+interface Vlan20
+ description Engineering SVI
+ ip address 10.20.20.1 255.255.255.0
+ ip helper-address 10.20.0.50
+!
+interface Vlan99
+ description Management SVI
+ ip address 192.168.99.10 255.255.255.0
+!
+interface Loopback0
+ description Router-ID
+ ip address 10.255.255.2 255.255.255.255
+ ip ospf 1 area 0
+!
+router ospf 1
+ router-id 10.255.255.2
+ passive-interface default
+ no passive-interface GigabitEthernet1/0/24
+ network 10.10.0.0 0.0.0.3 area 0
+ network 10.20.10.0 0.0.0.255 area 0
+ network 10.20.20.0 0.0.0.255 area 0
+!
+router bgp 65002
+ neighbor 10.10.0.1 remote-as 65001
+ neighbor 10.10.0.1 description iBGP-to-core-rtr-01
+ neighbor 10.10.0.10 remote-as 65003
+ neighbor 10.10.0.10 description iBGP-to-edge-fw-01
+ neighbor 10.10.0.10 password MD5-SECRET-ORIGINAL
+!
+ip access-list extended VLAN10_ACL
+ remark Finance VLAN egress filter
+ permit tcp 10.20.10.0 0.0.0.255 any eq https
+ permit tcp 10.20.10.0 0.0.0.255 any eq www
+ permit udp 10.20.10.0 0.0.0.255 host 10.20.0.50 eq bootps
+ deny ip 10.20.10.0 0.0.0.255 10.20.20.0 0.0.0.255 log
+ permit ip any any
+!
+end

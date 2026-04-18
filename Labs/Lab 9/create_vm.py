@@ -3,10 +3,10 @@ from loguru import logger
 import json
 
 # OpenStack resources
-IMAGE_NAME = "cirros-0.6.3-x86_64-disk"
-FLAVOR_NAME = "cirros256"
+IMAGE_NAME = "debian"
+FLAVOR_NAME = "m1.nano"
 EXTERNAL_NETWORK = "public"
-SERVER_PREFIX = "cirros_auto_"
+SERVER_PREFIX = "kub_"
 MAX_SCALE = 4
 CPU_THRESHOLD = 10
 
@@ -61,6 +61,7 @@ def create_server(server_name, topology_file="topology.json"):
         image_id=image.id,
         flavor_id=flavor.id,
         networks=[{"uuid": private_network.id}],
+        key_name="mykey"
     )
 
     logger.info(f"Server {server_name} created, waiting for ACTIVE state...")

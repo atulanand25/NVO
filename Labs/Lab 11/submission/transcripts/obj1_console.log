@@ -1,0 +1,518 @@
+[04/17/26 16:28:37] INFO     Processing request of type            server.py:727
+                             ListToolsRequest                                   
+╭──────────────────────────────────── MCP ─────────────────────────────────────╮
+│ Connected to MCP server. Tools discovered: list_devices, get_interfaces,     │
+│ get_bgp_neighbors, get_route_table, get_device_health, get_logs, ping_device │
+╰──────────────────────────────────────────────────────────────────────────────╯
+───────── QUERY: What is the status of all interfaces on core-rtr-01? ──────────
+→ tool_call get_interfaces({"device_name": "core-rtr-01"})
+[04/17/26 16:28:39] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "core-rtr-01",                                                      
+  "interfaces": [                                                               
+    {                                                                           
+      "name": "GigabitEthernet0/0/0",                                           
+      "description": "UPLINK to ISP-A",                                         
+      "ipv4": "203.0.113.2/30",                                                 
+      "admin_status": "up",                                                     
+      "oper_status": "up",                                                      
+      "speed_mbps": 1000,                                                       
+      "input_errors": 0,                                                        
+      "output_errors": 0,                                                       
+      "crc_errors": 0                                                           
+    },                                                                          
+    {                                                                           
+      "name": "GigabitEthernet0/0/1",                                           
+      "description": "To dist-sw-01 Gi1/0/24",                                  
+      "ipv4": "10.10.0.1/30",                                                   
+      "admin_status": "up",                                                     
+      "oper_status": "up",                                                      
+      "speed_mbps": 1000,                                                       
+      "input_errors": 12,                                                       
+      "output_errors": 0,                                                       
+      "crc_errors": 0                                                           
+    },                                                                          
+    {                                                                           
+      "name": "GigabitEthernet0/0/2",                                           
+      "description": "To edge-fw-01 Gi1",                                       
+      "ipv4": "10.10.0.5/30",                                                   
+      "admin_status": "up",                                                     
+      "oper_status": "up",                                                      
+      "speed_mbps": 1000,                                                       
+      "input_errors": 3,                                                        
+      "output_errors": 0,                                                       
+      "crc_errors": 0                                                           
+    },                                                                          
+    {                                                                           
+      "name": "GigabitEthernet0/0/3",                                           
+      "description": "SPARE/transit to secondary MDF",                          
+      "ipv4": "10.10.0.9/30",                                                   
+      "admin_status": "up",                                                     
+      "oper_status": "down",                                                    
+      "speed_mbps": 0,                                                          
+      "input_errors": 4871,                                                     
+      "output_errors": 29,                                                      
+      "crc_errors": 4602                                                        
+    },                                                                          
+    {                                                                           
+      "name":                                                                   
+... [truncated]                                                                 
+╭────────────────────────────── Claude (step 2) ───────────────────────────────╮
+│ ## Interface Status for core-rtr-01                                          │
+│                                                                              │
+│ | Interface | Description | IP Address | Admin | Oper | Speed | Errors       │
+│ (In/Out/CRC) |                                                               │
+│ |-----------|-------------|------------|-------|------|-------|------------- │
+│ --------|                                                                    │
+│ | **GigabitEthernet0/0/0** | UPLINK to ISP-A | 203.0.113.2/30 | up | **up**  │
+│ | 1000 Mbps | 0/0/0 ✓ |                                                      │
+│ | **GigabitEthernet0/0/1** | To dist-sw-01 Gi1/0/24 | 10.10.0.1/30 | up |    │
+│ **up** | 1000 Mbps | 12/0/0 |                                                │
+│ | **GigabitEthernet0/0/2** | To edge-fw-01 Gi1 | 10.10.0.5/30 | up | **up**  │
+│ | 1000 Mbps | 3/0/0 |                                                        │
+│ | **GigabitEthernet0/0/3** | SPARE/transit to secondary MDF | 10.10.0.9/30 | │
+│ up | **down** | 0 Mbps | 4871/29/4602 ⚠️ |                                   │
+│ | **Loopback0** | Router-ID | 10.255.255.1/32 | up | **up** | 8000 Mbps |    │
+│ 0/0/0 ✓ |                                                                    │
+│                                                                              │
+│ ### Key Findings:                                                            │
+│ - **3 of 4 physical interfaces are up and operational**                      │
+│ - **⚠️ GigabitEthernet0/0/3** is **down** (admin up/oper down) with          │
+│ significant errors (4,602 CRC errors, 4,871 input errors) – indicates        │
+│ physical layer or cable issues                                               │
+│ - Minor input errors on Gi0/0/1 (12) and Gi0/0/2 (3) are within normal       │
+│ tolerances                                                                   │
+│ - ISP uplink and internal connections to dist-sw-01 and edge-fw-01 are       │
+│ healthy                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮
+│ ## Interface Status for core-rtr-01                                          │
+│                                                                              │
+│ | Interface | Description | IP Address | Admin | Oper | Speed | Errors       │
+│ (In/Out/CRC) |                                                               │
+│ |-----------|-------------|------------|-------|------|-------|------------- │
+│ --------|                                                                    │
+│ | **GigabitEthernet0/0/0** | UPLINK to ISP-A | 203.0.113.2/30 | up | **up**  │
+│ | 1000 Mbps | 0/0/0 ✓ |                                                      │
+│ | **GigabitEthernet0/0/1** | To dist-sw-01 Gi1/0/24 | 10.10.0.1/30 | up |    │
+│ **up** | 1000 Mbps | 12/0/0 |                                                │
+│ | **GigabitEthernet0/0/2** | To edge-fw-01 Gi1 | 10.10.0.5/30 | up | **up**  │
+│ | 1000 Mbps | 3/0/0 |                                                        │
+│ | **GigabitEthernet0/0/3** | SPARE/transit to secondary MDF | 10.10.0.9/30 | │
+│ up | **down** | 0 Mbps | 4871/29/4602 ⚠️ |                                   │
+│ | **Loopback0** | Router-ID | 10.255.255.1/32 | up | **up** | 8000 Mbps |    │
+│ 0/0/0 ✓ |                                                                    │
+│                                                                              │
+│ ### Key Findings:                                                            │
+│ - **3 of 4 physical interfaces are up and operational**                      │
+│ - **⚠️ GigabitEthernet0/0/3** is **down** (admin up/oper down) with          │
+│ significant errors (4,602 CRC errors, 4,871 input errors) – indicates        │
+│ physical layer or cable issues                                               │
+│ - Minor input errors on Gi0/0/1 (12) and Gi0/0/2 (3) are within normal       │
+│ tolerances                                                                   │
+│ - ISP uplink and internal connections to dist-sw-01 and edge-fw-01 are       │
+│ healthy                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+──── QUERY: Are there any BGP neighbors that are not in Established state? ─────
+╭────────────────────────────── Claude (step 1) ───────────────────────────────╮
+│ I'll check the BGP neighbor status across all devices to identify any        │
+│ neighbors not in Established state.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+→ tool_call list_devices({})
+[04/17/26 16:28:50] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "devices": [                                                                  
+    "core-rtr-01",                                                              
+    "dist-sw-01",                                                               
+    "edge-fw-01"                                                                
+  ]                                                                             
+}                                                                               
+╭────────────────────────────── Claude (step 2) ───────────────────────────────╮
+│ Now let me check the BGP neighbors on all devices:                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+→ tool_call get_bgp_neighbors({"device_name": "core-rtr-01"})
+[04/17/26 16:28:52] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "core-rtr-01",                                                      
+  "neighbors": [                                                                
+    {                                                                           
+      "peer_ip": "203.0.113.1",                                                 
+      "remote_asn": 64501,                                                      
+      "local_asn": 65001,                                                       
+      "state": "Established",                                                   
+      "uptime": "30d21h",                                                       
+      "prefixes_received": 842312,                                              
+      "prefixes_sent": 12,                                                      
+      "description": "ISP-A eBGP"                                               
+    },                                                                          
+    {                                                                           
+      "peer_ip": "10.10.0.6",                                                   
+      "remote_asn": 65003,                                                      
+      "local_asn": 65001,                                                       
+      "state": "Established",                                                   
+      "uptime": "14d02h",                                                       
+      "prefixes_received": 24,                                                  
+      "prefixes_sent": 842336,                                                  
+      "description": "iBGP to edge-fw-01"                                       
+    }                                                                           
+  ]                                                                             
+}                                                                               
+→ tool_call get_bgp_neighbors({"device_name": "dist-sw-01"})
+                    INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "dist-sw-01",                                                       
+  "neighbors": [                                                                
+    {                                                                           
+      "peer_ip": "10.10.0.1",                                                   
+      "remote_asn": 65001,                                                      
+      "local_asn": 65002,                                                       
+      "state": "Established",                                                   
+      "uptime": "14d02h",                                                       
+      "prefixes_received": 12,                                                  
+      "prefixes_sent": 6,                                                       
+      "description": "iBGP to core-rtr-01"                                      
+    },                                                                          
+    {                                                                           
+      "peer_ip": "10.10.0.10",                                                  
+      "remote_asn": 65003,                                                      
+      "local_asn": 65002,                                                       
+      "state": "Idle",                                                          
+      "uptime": "never",                                                        
+      "prefixes_received": 0,                                                   
+      "prefixes_sent": 0,                                                       
+      "description": "iBGP to edge-fw-01 (auth mismatch suspected)"             
+    }                                                                           
+  ]                                                                             
+}                                                                               
+→ tool_call get_bgp_neighbors({"device_name": "edge-fw-01"})
+                    INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "edge-fw-01",                                                       
+  "neighbors": [                                                                
+    {                                                                           
+      "peer_ip": "10.10.0.5",                                                   
+      "remote_asn": 65001,                                                      
+      "local_asn": 65003,                                                       
+      "state": "Established",                                                   
+      "uptime": "14d02h",                                                       
+      "prefixes_received": 842336,                                              
+      "prefixes_sent": 24,                                                      
+      "description": "iBGP to core-rtr-01"                                      
+    },                                                                          
+    {                                                                           
+      "peer_ip": "10.10.0.9",                                                   
+      "remote_asn": 65002,                                                      
+      "local_asn": 65003,                                                       
+      "state": "Idle",                                                          
+      "uptime": "never",                                                        
+      "prefixes_received": 0,                                                   
+      "prefixes_sent": 0,                                                       
+      "description": "iBGP to dist-sw-01 (auth mismatch)"                       
+    }                                                                           
+  ]                                                                             
+}                                                                               
+╭────────────────────────────── Claude (step 3) ───────────────────────────────╮
+│ **Yes, there are 2 BGP neighbors not in Established state:**                 │
+│                                                                              │
+│ 1. **dist-sw-01** → peer 10.10.0.10 (edge-fw-01)                             │
+│    - State: **Idle**                                                         │
+│    - Remote ASN: 65003                                                       │
+│    - Uptime: never                                                           │
+│    - Description: "iBGP to edge-fw-01 (auth mismatch suspected)"             │
+│                                                                              │
+│ 2. **edge-fw-01** → peer 10.10.0.9 (dist-sw-01)                              │
+│    - State: **Idle**                                                         │
+│    - Remote ASN: 65002                                                       │
+│    - Uptime: never                                                           │
+│    - Description: "iBGP to dist-sw-01 (auth mismatch)"                       │
+│                                                                              │
+│ Both entries describe the same failed peering session between dist-sw-01 and │
+│ edge-fw-01. The descriptions indicate an **authentication mismatch** is      │
+│ preventing the session from establishing. You should verify BGP MD5          │
+│ passwords or authentication keys are configured identically on both sides.   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮
+│ **Yes, there are 2 BGP neighbors not in Established state:**                 │
+│                                                                              │
+│ 1. **dist-sw-01** → peer 10.10.0.10 (edge-fw-01)                             │
+│    - State: **Idle**                                                         │
+│    - Remote ASN: 65003                                                       │
+│    - Uptime: never                                                           │
+│    - Description: "iBGP to edge-fw-01 (auth mismatch suspected)"             │
+│                                                                              │
+│ 2. **edge-fw-01** → peer 10.10.0.9 (dist-sw-01)                              │
+│    - State: **Idle**                                                         │
+│    - Remote ASN: 65002                                                       │
+│    - Uptime: never                                                           │
+│    - Description: "iBGP to dist-sw-01 (auth mismatch)"                       │
+│                                                                              │
+│ Both entries describe the same failed peering session between dist-sw-01 and │
+│ edge-fw-01. The descriptions indicate an **authentication mismatch** is      │
+│ preventing the session from establishing. You should verify BGP MD5          │
+│ passwords or authentication keys are configured identically on both sides.   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+───────── QUERY: Can core-rtr-01 reach edge-fw-01? Check connectivity. ─────────
+╭────────────────────────────── Claude (step 1) ───────────────────────────────╮
+│ I'll check the connectivity between core-rtr-01 and edge-fw-01 by running a  │
+│ ping test.                                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+→ tool_call ping_device({"source": "core-rtr-01", "destination": "edge-fw-01"})
+[04/17/26 16:29:00] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "source": "core-rtr-01",                                                      
+  "destination": "edge-fw-01",                                                  
+  "resolved_device": "edge-fw-01",                                              
+  "count": 5,                                                                   
+  "reachable": true,                                                            
+  "rtt_ms_avg": 1.2,                                                            
+  "loss_percent": 0                                                             
+}                                                                               
+╭────────────────────────────── Claude (step 2) ───────────────────────────────╮
+│ **✅ Connectivity confirmed**                                                │
+│                                                                              │
+│ core-rtr-01 **can** reach edge-fw-01:                                        │
+│ - **Reachable**: Yes                                                         │
+│ - **Packet loss**: 0%                                                        │
+│ - **Average RTT**: 1.2 ms                                                    │
+│                                                                              │
+│ The connection is healthy with no packet loss and low latency.               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮
+│ **✅ Connectivity confirmed**                                                │
+│                                                                              │
+│ core-rtr-01 **can** reach edge-fw-01:                                        │
+│ - **Reachable**: Yes                                                         │
+│ - **Packet loss**: 0%                                                        │
+│ - **Average RTT**: 1.2 ms                                                    │
+│                                                                              │
+│ The connection is healthy with no packet loss and low latency.               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+─ QUERY: Which device has the highest CPU utilization? Should I be concerned? ──
+╭────────────────────────────── Claude (step 1) ───────────────────────────────╮
+│ I'll check the CPU utilization across all devices to identify which one is   │
+│ highest and whether it's concerning.                                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+→ tool_call list_devices({})
+[04/17/26 16:29:05] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "devices": [                                                                  
+    "core-rtr-01",                                                              
+    "dist-sw-01",                                                               
+    "edge-fw-01"                                                                
+  ]                                                                             
+}                                                                               
+→ tool_call get_device_health({"device_name": "core-rtr-01"})
+[04/17/26 16:29:07] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "core-rtr-01",                                                      
+  "cpu_percent": 18,                                                            
+  "memory_percent": 42,                                                         
+  "uptime": "87 days, 14:22:06",                                                
+  "os_version": "IOS-XE 17.9.4a",                                               
+  "hardware": "ISR4451-X/K9",                                                   
+  "serial": "FOC24100ABC"                                                       
+}                                                                               
+→ tool_call get_device_health({"device_name": "dist-sw-01"})
+                    INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "dist-sw-01",                                                       
+  "cpu_percent": 22,                                                            
+  "memory_percent": 51,                                                         
+  "uptime": "152 days, 09:11:55",                                               
+  "os_version": "IOS-XE 17.12.3",                                               
+  "hardware": "C9300-48P",                                                      
+  "serial": "FJZ25330XYZ"                                                       
+}                                                                               
+→ tool_call get_device_health({"device_name": "edge-fw-01"})
+                    INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "edge-fw-01",                                                       
+  "cpu_percent": 94,                                                            
+  "memory_percent": 78,                                                         
+  "uptime": "41 days, 02:47:19",                                                
+  "os_version": "FTDv 7.4.2",                                                   
+  "hardware": "FPR-1140",                                                       
+  "serial": "JAD2710PQR"                                                        
+}                                                                               
+╭────────────────────────────── Claude (step 3) ───────────────────────────────╮
+│ **Highest CPU:** **edge-fw-01** at **94%**                                   │
+│                                                                              │
+│ **Yes, you should be concerned.**                                            │
+│                                                                              │
+│ **Analysis:**                                                                │
+│ - **edge-fw-01**: 94% CPU, 78% memory - This is critically high and          │
+│ indicates the firewall is under severe load                                  │
+│ - **dist-sw-01**: 22% CPU, 51% memory - Normal                               │
+│ - **core-rtr-01**: 18% CPU, 42% memory - Normal                              │
+│                                                                              │
+│ **Recommendations:**                                                         │
+│ 1. **Investigate immediately** - Check logs on edge-fw-01 for errors or      │
+│ anomalies                                                                    │
+│ 2. **Review traffic patterns** - The firewall may be handling a traffic      │
+│ spike, DDoS, or heavy inspection load                                        │
+│ 3. **Check policy configuration** - Complex security policies or deep packet │
+│ inspection rules can drive high CPU                                          │
+│ 4. **Consider resource upgrade** - If this is sustained load, the FPR-1140   │
+│ may need more capacity or traffic offloading                                 │
+│                                                                              │
+│ CPU above 80% sustained on a firewall can lead to:                           │
+│ - Packet drops                                                               │
+│ - Session timeouts                                                           │
+│ - Degraded throughput                                                        │
+│ - Inspection bypasses                                                        │
+│                                                                              │
+│ Would you like me to check the logs on edge-fw-01 to see what's driving the  │
+│ load?                                                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮
+│ **Highest CPU:** **edge-fw-01** at **94%**                                   │
+│                                                                              │
+│ **Yes, you should be concerned.**                                            │
+│                                                                              │
+│ **Analysis:**                                                                │
+│ - **edge-fw-01**: 94% CPU, 78% memory - This is critically high and          │
+│ indicates the firewall is under severe load                                  │
+│ - **dist-sw-01**: 22% CPU, 51% memory - Normal                               │
+│ - **core-rtr-01**: 18% CPU, 42% memory - Normal                              │
+│                                                                              │
+│ **Recommendations:**                                                         │
+│ 1. **Investigate immediately** - Check logs on edge-fw-01 for errors or      │
+│ anomalies                                                                    │
+│ 2. **Review traffic patterns** - The firewall may be handling a traffic      │
+│ spike, DDoS, or heavy inspection load                                        │
+│ 3. **Check policy configuration** - Complex security policies or deep packet │
+│ inspection rules can drive high CPU                                          │
+│ 4. **Consider resource upgrade** - If this is sustained load, the FPR-1140   │
+│ may need more capacity or traffic offloading                                 │
+│                                                                              │
+│ CPU above 80% sustained on a firewall can lead to:                           │
+│ - Packet drops                                                               │
+│ - Session timeouts                                                           │
+│ - Degraded throughput                                                        │
+│ - Inspection bypasses                                                        │
+│                                                                              │
+│ Would you like me to check the logs on edge-fw-01 to see what's driving the  │
+│ load?                                                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+── QUERY: Check the health of all devices and summarize any issues you find. ───
+╭────────────────────────────── Claude (step 1) ───────────────────────────────╮
+│ I'll check the health of all devices in the network. Let me start by getting │
+│ the list of devices, then check each one's health.                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+→ tool_call list_devices({})
+[04/17/26 16:29:24] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "devices": [                                                                  
+    "core-rtr-01",                                                              
+    "dist-sw-01",                                                               
+    "edge-fw-01"                                                                
+  ]                                                                             
+}                                                                               
+╭────────────────────────────── Claude (step 2) ───────────────────────────────╮
+│ Now let me check the health of all three devices:                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
+→ tool_call get_device_health({"device_name": "core-rtr-01"})
+[04/17/26 16:29:26] INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "core-rtr-01",                                                      
+  "cpu_percent": 18,                                                            
+  "memory_percent": 42,                                                         
+  "uptime": "87 days, 14:22:06",                                                
+  "os_version": "IOS-XE 17.9.4a",                                               
+  "hardware": "ISR4451-X/K9",                                                   
+  "serial": "FOC24100ABC"                                                       
+}                                                                               
+→ tool_call get_device_health({"device_name": "dist-sw-01"})
+                    INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "dist-sw-01",                                                       
+  "cpu_percent": 22,                                                            
+  "memory_percent": 51,                                                         
+  "uptime": "152 days, 09:11:55",                                               
+  "os_version": "IOS-XE 17.12.3",                                               
+  "hardware": "C9300-48P",                                                      
+  "serial": "FJZ25330XYZ"                                                       
+}                                                                               
+→ tool_call get_device_health({"device_name": "edge-fw-01"})
+                    INFO     Processing request of type            server.py:727
+                             CallToolRequest                                    
+{                                                                               
+  "device": "edge-fw-01",                                                       
+  "cpu_percent": 94,                                                            
+  "memory_percent": 78,                                                         
+  "uptime": "41 days, 02:47:19",                                                
+  "os_version": "FTDv 7.4.2",                                                   
+  "hardware": "FPR-1140",                                                       
+  "serial": "JAD2710PQR"                                                        
+}                                                                               
+╭────────────────────────────── Claude (step 3) ───────────────────────────────╮
+│ ## Health Summary                                                            │
+│                                                                              │
+│ **⚠️ CRITICAL ISSUE FOUND:**                                                 │
+│                                                                              │
+│ **edge-fw-01** - Severe resource exhaustion:                                 │
+│ - **CPU: 94%** (critically high)                                             │
+│ - **Memory: 78%** (high)                                                     │
+│ - Uptime: 41 days                                                            │
+│ - Hardware: FPR-1140, OS: FTDv 7.4.2                                         │
+│                                                                              │
+│ **HEALTHY DEVICES:**                                                         │
+│                                                                              │
+│ **core-rtr-01** - Normal:                                                    │
+│ - CPU: 18%, Memory: 42%                                                      │
+│ - Uptime: 87 days                                                            │
+│ - Hardware: ISR4451-X/K9, OS: IOS-XE 17.9.4a                                 │
+│                                                                              │
+│ **dist-sw-01** - Normal:                                                     │
+│ - CPU: 22%, Memory: 51%                                                      │
+│ - Uptime: 152 days                                                           │
+│ - Hardware: C9300-48P, OS: IOS-XE 17.12.3                                    │
+│                                                                              │
+│ **Recommendation:** Investigate edge-fw-01 immediately. The 94% CPU          │
+│ utilization indicates the firewall is under severe load. Check traffic       │
+│ patterns, active connections, inspection policies, or potential performance  │
+│ issues. Consider reviewing logs for anomalies or attack indicators.          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────── FINAL ANSWER ────────────────────────────────╮
+│ ## Health Summary                                                            │
+│                                                                              │
+│ **⚠️ CRITICAL ISSUE FOUND:**                                                 │
+│                                                                              │
+│ **edge-fw-01** - Severe resource exhaustion:                                 │
+│ - **CPU: 94%** (critically high)                                             │
+│ - **Memory: 78%** (high)                                                     │
+│ - Uptime: 41 days                                                            │
+│ - Hardware: FPR-1140, OS: FTDv 7.4.2                                         │
+│                                                                              │
+│ **HEALTHY DEVICES:**                                                         │
+│                                                                              │
+│ **core-rtr-01** - Normal:                                                    │
+│ - CPU: 18%, Memory: 42%                                                      │
+│ - Uptime: 87 days                                                            │
+│ - Hardware: ISR4451-X/K9, OS: IOS-XE 17.9.4a                                 │
+│                                                                              │
+│ **dist-sw-01** - Normal:                                                     │
+│ - CPU: 22%, Memory: 51%                                                      │
+│ - Uptime: 152 days                                                           │
+│ - Hardware: C9300-48P, OS: IOS-XE 17.12.3                                    │
+│                                                                              │
+│ **Recommendation:** Investigate edge-fw-01 immediately. The 94% CPU          │
+│ utilization indicates the firewall is under severe load. Check traffic       │
+│ patterns, active connections, inspection policies, or potential performance  │
+│ issues. Consider reviewing logs for anomalies or attack indicators.          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Saved transcripts -> ../transcripts/obj1_transcripts.json
+Saved rich HTML transcript -> ../transcripts/obj1_transcripts.html
