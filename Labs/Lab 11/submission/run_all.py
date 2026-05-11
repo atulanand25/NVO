@@ -34,12 +34,24 @@ def main() -> None:
     args = ap.parse_args()
 
     if not os.getenv("ANTHROPIC_API_KEY"):
-        env_file = HERE / ".env"
-        if env_file.is_file():
-            for line in env_file.read_text().splitlines():
-                if line.startswith("ANTHROPIC_API_KEY="):
-                    os.environ["ANTHROPIC_API_KEY"] = line.split("=", 1)[1]
-                    break
+        # Search HERE, then walk up a few parent directories for a .env file.
+        candidates = [HERE, *HERE.parents[:3]]
+        for d in candidates:
+            env_file = d / ".env"
+            if not env_file.is_file():
+                continue
+            for raw in env_file.read_text().splitlines():
+                line = raw.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, val = line.partition("=")
+                key = key.strip()
+                val = val.strip().strip('"').strip("'")
+                # Don't overwrite anything already in the real environment.
+                os.environ.setdefault(key, val)
+            if os.getenv("ANTHROPIC_API_KEY"):
+                print(f"(loaded env from {env_file})")
+                break
     if not os.getenv("ANTHROPIC_API_KEY"):
         print("Set ANTHROPIC_API_KEY in environment or .env before running.",
               file=sys.stderr)
